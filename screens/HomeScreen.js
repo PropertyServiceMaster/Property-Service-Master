@@ -3,9 +3,15 @@ import { StyleSheet, View, Text,Image } from 'react-native';
 import { FlatGrid } from 'react-native-super-grid';
 import { useTheme } from '@react-navigation/native';
 
-export default function Example() {
+//create a header tab for the home screen
+
+
+
+
+
+export default function HomeScreen() {
   const [items, setItems] = React.useState([
-    { name: 'Lawn Care', code: '#1abc9c', image: require('../assets/mower.png') },
+    { name: 'Lawn Care', code: '#1abc9c', image: require('../assets/mower.png')  },
     { name: 'Junk Removal', code: '#2ecc71',image: require('../assets/junk.png') },
     { name: 'Sod Install', code: '#3498db' ,image: require('../assets/sod.png') },
     { name: 'Tree Trimming', code: '#9b59b6',image: require('../assets/trimming.png') },
@@ -36,7 +42,7 @@ export default function Example() {
 
 const styles = StyleSheet.create({
   gridView: {
-    marginTop: 100,
+    marginTop: 30,
     flex: 1,
   },
   itemContainer: {
