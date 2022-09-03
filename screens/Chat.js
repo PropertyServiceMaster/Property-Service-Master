@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, Button, StyleSheet, StatusBar } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+
 
 function Chat() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Chat </Text>
+      <Text>Chat 125</Text>
     </View>
   );
 }

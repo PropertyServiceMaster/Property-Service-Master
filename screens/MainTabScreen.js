@@ -1,107 +1,84 @@
-import React from 'react';
-
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { createStackNavigator } from '@react-navigation/stack';
-
-import Icon from 'react-native-vector-icons/Ionicons';
-
+import * as React from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
-import DetailsScreen from '../screens/DetailsScreen';
-import ExploreScreen from '../screens/ExploreScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import Appointment from '../screens/Appointment';
+import AppSettings from '../screens/AppSettings';
+import Chat from '../screens/Chat';
+import LawnCare from '../screens/LawnCare';
 
-const HomeStack = createStackNavigator();
-const DetailsStack = createStackNavigator();
 
-const Tab = createMaterialBottomTabNavigator();
 
-const MainTabScreen = () => (
+const Tab = createBottomTabNavigator();
+
+function MyTabs() {
+  return (
     <Tab.Navigator
-      initialRouteName="Home"
-      activeColor="#fff"
+      initialRouteName="LoginScreen"
+      activeColor="#e91e63"
+      labelStyle={{ fontSize: 12 }}
+      style={{ backgroundColor: 'tomato' }}
     >
       <Tab.Screen
-        name="Home"
-        component={HomeStackScreen}
+        name="Home Screen"
+        component={HomeScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarColor: '#009387',
+          tabBarColor: '#62a725',
           tabBarIcon: ({ color }) => (
-            <Icon name="ios-home" color={color} size={26} />
+            <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
         }}
       />
-      <Tab.Screen
-        name="Notifications"
-        component={DetailsStackScreen}
+       <Tab.Screen
+        name="Appointments "
+        component={Appointment}
         options={{
-          tabBarLabel: 'Updates',
+          tabBarLabel: 'Appointments',
           tabBarColor: '#1f65ff',
           tabBarIcon: ({ color }) => (
-            <Icon name="ios-notifications" color={color} size={26} />
+            <MaterialCommunityIcons name="bell" color={color} size={26} />
+          ),
+        }}
+      />
+     <Tab.Screen
+        name="Settings"
+        component={AppSettings}
+        options={{
+          tabBarLabel: 'Settings',
+          tabBarColor: '#ee0bf5',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="account" color={color} size={26} />
+          ),
+        }}
+      />
+     <Tab.Screen
+        name="Chat"
+        component={Chat}
+        options={{
+          tabBarLabel: 'Chat',
+          tabBarColor: '#f59e0b',
+          tabBarIcon: ({ color }) => (
+            <MaterialCommunityIcons name="chat" color={color} size={26} />
           ),
         }}
       />
       <Tab.Screen
-        name="Profile"
-        component={ProfileScreen}
+        name="Lawn Care"
+        component={LawnCare}
         options={{
-          tabBarLabel: 'Profile',
-          tabBarColor: '#694fad',
-          tabBarIcon: ({ color }) => (
-            <Icon name="ios-person" color={color} size={26} />
-          ),
-        }}
-      />
-      <Tab.Screen
-        name="Explore"
-        component={ExploreScreen}
-        options={{
-          tabBarLabel: 'Explore',
-          tabBarColor: '#d02860',
-          tabBarIcon: ({ color }) => (
-            <Icon name="ios-aperture" color={color} size={26} />
-          ),
-        }}
+        tabBarButton: () => null,
+}}
       />
     </Tab.Navigator>
-);
+  );
+}
 
-export default MainTabScreen;
-
-const HomeStackScreen = ({navigation}) => (
-<HomeStack.Navigator screenOptions={{
-        headerStyle: {
-        backgroundColor: '#009387',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-        fontWeight: 'bold'
-        }
-    }}>
-        <HomeStack.Screen name="Home" component={HomeScreen} options={{
-        title:'Overview',
-        headerLeft: () => (
-            <Icon.Button name="ios-menu" size={25} backgroundColor="#009387" onPress={() => navigation.openDrawer()}></Icon.Button>
-        )
-        }} />
-</HomeStack.Navigator>
-);
-
-const DetailsStackScreen = ({navigation}) => (
-<DetailsStack.Navigator screenOptions={{
-        headerStyle: {
-        backgroundColor: '#1f65ff',
-        },
-        headerTintColor: '#fff',
-        headerTitleStyle: {
-        fontWeight: 'bold'
-        }
-    }}>
-        <DetailsStack.Screen name="Details" component={DetailsScreen} options={{
-        headerLeft: () => (
-            <Icon.Button name="ios-menu" size={25} backgroundColor="#1f65ff" onPress={() => navigation.openDrawer()}></Icon.Button>
-        )
-        }} />
-</DetailsStack.Navigator>
-);
+export default function App() {
+  return (
+    <NavigationContainer>
+       <MyTabs />
+    </NavigationContainer>
+  );
+}

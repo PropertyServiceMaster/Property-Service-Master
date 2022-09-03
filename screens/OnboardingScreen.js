@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 import Onboarding from 'react-native-onboarding-swiper';
@@ -47,7 +48,11 @@ const Done = ({...props}) => (
     </TouchableOpacity>
 );
 
+
 const OnboardingScreen = ({navigation}) => {
+
+
+
     return (
         <Onboarding
         SkipButtonComponent={Skip}
@@ -56,6 +61,7 @@ const OnboardingScreen = ({navigation}) => {
         DotComponent={Dots}
         onSkip={() => navigation.replace("Login")}
         onDone={() => navigation.navigate("Login")}
+
         pages={[
           {
             backgroundColor: '#62a725',
