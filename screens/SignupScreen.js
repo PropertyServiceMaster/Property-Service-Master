@@ -1,131 +1,167 @@
-import React, {useContext, useState} from 'react';
-import {View, Text, TouchableOpacity, Platform, StyleSheet} from 'react-native';
-import FormInput from '../components/FormInput';
-import FormButton from '../components/FormButton';
-import SocialButton from '../components/SocialButton';
+import React, { useState } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { Formik } from 'formik';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import { View, TextInput, Logo, Button, FormErrorMessage } from '../components';
+import { Images, Colors, auth } from '../config';
+import { useTogglePasswordVisibility } from '../hooks';
+import { signupValidationSchema } from '../utils';
 
-const SignupScreen = ({navigation}) => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
-  const [confirmPassword, setConfirmPassword] = useState();
+export const SignupScreen = ({ navigation }) => {
+  const [errorState, setErrorState] = useState('');
 
+  const {
+    passwordVisibility,
+    handlePasswordVisibility,
+    rightIcon,
+    handleConfirmPasswordVisibility,
+    confirmPasswordIcon,
+    confirmPasswordVisibility
+  } = useTogglePasswordVisibility();
 
+  const handleSignup = async values => {
+    const { email, password } = values;
+
+    createUserWithEmailAndPassword(auth, email, password).catch(error =>
+      setErrorState(error.message)
+    );
+  };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Create an account</Text>
-
-      <FormInput
-        labelValue={email}
-        onChangeText={(userEmail) => setEmail(userEmail)}
-        placeholderText="Email"
-        iconType="user"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
-
-      <FormInput
-        labelValue={password}
-        onChangeText={(userPassword) => setPassword(userPassword)}
-        placeholderText="Password"
-        iconType="lock"
-        secureTextEntry={true}
-      />
-
-      <FormInput
-        labelValue={confirmPassword}
-        onChangeText={(userPassword) => setConfirmPassword(userPassword)}
-        placeholderText="Confirm Password"
-        iconType="lock"
-        secureTextEntry={true}
-      />
-
-      <FormButton
-        buttonTitle="Sign Up"
-        onPress={() => register(email, password)}
-      />
-
-      <View style={styles.textPrivate}>
-        <Text style={styles.color_textPrivate}>
-          By registering, you confirm that you accept our{' '}
-        </Text>
-        <TouchableOpacity onPress={() => alert('Terms Clicked!')}>
-          <Text style={[styles.color_textPrivate, {color: '#e88832'}]}>
-            Terms of service
-          </Text>
-        </TouchableOpacity>
-        <Text style={styles.color_textPrivate}> and </Text>
-        <Text style={[styles.color_textPrivate, {color: '#e88832'}]}>
-          Privacy Policy
-        </Text>
-      </View>
-
-      {Platform.OS === 'android' ? (
-        <View>
-          <SocialButton
-            buttonTitle="Sign Up with Facebook"
-            btnType="facebook"
-            color="#4867aa"
-            backgroundColor="#e6eaf4"
-            onPress={() => {}}
-          />
-    
-          <SocialButton
-            buttonTitle="Sign Up with Google"
-            btnType="google"
-            color="#de4d41"
-            backgroundColor="#f5e7ea"
-            onPress={() => {}}
-          />
+    <View isSafe style={styles.container}>
+      <KeyboardAwareScrollView enableOnAndroid={true}>
+        {/* LogoContainer: consits app logo and screen title */}
+        <View style={styles.logoContainer}>
+          <Logo uri={Images.logo} />
+          <Text style={styles.screenTitle}>Create a new account!</Text>
         </View>
-      ) : null}
-
-      <TouchableOpacity
-        style={styles.navButton}
-        onPress={() => navigation.navigate('Login')}>
-        <Text style={styles.navButtonText}>Have an account? Sign In</Text>
-      </TouchableOpacity>
+        {/* Formik Wrapper */}
+        <Formik
+          initialValues={{
+            email: '',
+            password: '',
+            confirmPassword: ''
+          }}
+          validationSchema={signupValidationSchema}
+          onSubmit={values => handleSignup(values)}
+        >
+          {({
+            values,
+            touched,
+            errors,
+            handleChange,
+            handleSubmit,
+            handleBlur
+          }) => (
+            <>
+              {/* Input fields */}
+              <TextInput
+                name='email'
+                leftIconName='email'
+                placeholder='Enter email'
+                autoCapitalize='none'
+                keyboardType='email-address'
+                textContentType='emailAddress'
+                autoFocus={true}
+                value={values.email}
+                onChangeText={handleChange('email')}
+                onBlur={handleBlur('email')}
+              />
+              <FormErrorMessage error={errors.email} visible={touched.email} />
+              <TextInput
+                name='password'
+                leftIconName='key-variant'
+                placeholder='Enter password'
+                autoCapitalize='none'
+                autoCorrect={false}
+                secureTextEntry={passwordVisibility}
+                textContentType='newPassword'
+                rightIcon={rightIcon}
+                handlePasswordVisibility={handlePasswordVisibility}
+                value={values.password}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur('password')}
+              />
+              <FormErrorMessage
+                error={errors.password}
+                visible={touched.password}
+              />
+              <TextInput
+                name='confirmPassword'
+                leftIconName='key-variant'
+                placeholder='Enter password'
+                autoCapitalize='none'
+                autoCorrect={false}
+                secureTextEntry={confirmPasswordVisibility}
+                textContentType='password'
+                rightIcon={confirmPasswordIcon}
+                handlePasswordVisibility={handleConfirmPasswordVisibility}
+                value={values.confirmPassword}
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur('confirmPassword')}
+              />
+              <FormErrorMessage
+                error={errors.confirmPassword}
+                visible={touched.confirmPassword}
+              />
+              {/* Display Screen Error Mesages */}
+              {errorState !== '' ? (
+                <FormErrorMessage error={errorState} visible={true} />
+              ) : null}
+              {/* Signup button */}
+              <Button style={styles.button} onPress={handleSubmit}>
+                <Text style={styles.buttonText}>Signup</Text>
+              </Button>
+            </>
+          )}
+        </Formik>
+        {/* Button to navigate to Login screen */}
+        <Button
+          style={styles.borderlessButtonContainer}
+          borderless
+          title={'Already have an account?'}
+          onPress={() => navigation.navigate('Login')}
+        />
+      </KeyboardAwareScrollView>
     </View>
   );
 };
 
-export default SignupScreen;
-
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#f9fafd',
     flex: 1,
+    backgroundColor: Colors.white,
+    paddingHorizontal: 12
+  },
+  logoContainer: {
+    alignItems: 'center',
+     marginTop: 50,
+  },
+  screenTitle: {
+    fontSize: 32,
+    fontWeight: '700',
+    color: Colors.black,
+    paddingTop: 20
+  },
+  button: {
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    marginTop: 8,
+    backgroundColor: '#62a725',
+    padding: 10,
+    borderRadius: 8
   },
-  text: {
-    fontFamily: 'Kufam-SemiBoldItalic',
-    fontSize: 28,
-    marginBottom: 10,
-    color: '#051d5f',
+  buttonText: {
+    fontSize: 20,
+    color: Colors.white,
+    fontWeight: '700'
   },
-  navButton: {
-    marginTop: 15,
-  },
-  navButtonText: {
-    fontSize: 18,
-    fontWeight: '500',
-    color: '#2e64e5',
-    fontFamily: 'Lato-Regular',
-  },
-  textPrivate: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginVertical: 35,
-    justifyContent: 'center',
-  },
-  color_textPrivate: {
-    fontSize: 13,
-    fontWeight: '400',
-    fontFamily: 'Lato-Regular',
-    color: 'grey',
-  },
+  borderlessButtonContainer: {
+    marginTop: 16,
+    alignItems: 'center',
+    justifyContent: 'center'
+  }
 });

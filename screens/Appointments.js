@@ -1,21 +1,24 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, StatusBar } from 'react-native';
-import { useTheme } from '@react-navigation/native';
+import { View, StyleSheet, Button } from 'react-native';
+import { signOut } from 'firebase/auth';
 
-function Appointments() {
+import { auth } from '../config';
+
+const Appointments = () => {
+  const handleLogout = () => {
+    signOut(auth).catch(error => console.log('Error logging out: ', error));
+  };
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Appointments</Text>
+    <View style={styles.container}>
+      <Button title='Sign Out' onPress={handleLogout} />
     </View>
   );
-}
+};
 
 export default Appointments;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    alignItems: 'center', 
-    justifyContent: 'center'
-  },
+    flex: 1
+  }
 });

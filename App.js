@@ -1,9 +1,17 @@
 import React from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-import Providers from './navigation';
+import { RootNavigator } from './navigation/RootNavigator';
+import { AuthenticatedUserProvider } from './providers';
 
 const App = () => {
-  return <Providers />;
-}
+  return (
+    <AuthenticatedUserProvider>
+      <SafeAreaProvider>
+        <RootNavigator />
+      </SafeAreaProvider>
+    </AuthenticatedUserProvider>
+  );
+};
 
 export default App;

@@ -1,25 +1,22 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, } from 'react-native';
+import { View, StyleSheet, Button } from 'react-native';
 
-
-function LawnCare({ navigation }) {
+const LawnCare = () => {
+  
+  const handleLogout = () => {
+    signOut(auth).catch(error => console.log('Error logging out: ', error));
+  };
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Welcome To The Lawn Care Page..</Text>
-      <Button
-        title="Go to Details"
-        onPress={() => navigation.navigate('Details')}
-      />
+    <View style={styles.container}>
+      <Button title='Sign Out of lawn care' onPress={handleLogout} />
     </View>
   );
-}
+};
 
 export default LawnCare;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1, 
-    alignItems: 'center', 
-    justifyContent: 'center'
-  },
+    flex: 1
+  }
 });

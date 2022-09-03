@@ -1,14 +1,13 @@
-import * as React from 'react';
-import { StyleSheet, View, Text,Image,TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text,Image,TouchableOpacity,Button } from 'react-native';
 import { FlatGrid } from 'react-native-super-grid';
 
+// CAN USE TO CREATE NEW SERVICES  
 
+export const HomeScreen = ({ navigation }) => {
+   const [items, setItems] = React.useState([
 
-
-function HomeScreen({ navigation }) {
- const [items, setItems] = React.useState([
-
-    { name: 'Lawn Care', code: '#1abc9c', image: require('../assets/mower.png'), route: 'Lawn Care' },
+    { name: 'Lawn Care', code: '#1abc9c', image: require('../assets/mower.png'), route: 'LawnCare' }, // COMES FROM THE APPSTACK.JS
     { name: 'Junk Removal', code: '#2ecc71',image: require('../assets/junk.png'), route: 'Chat'},
     { name: 'Sod Install', code: '#3498db' ,image: require('../assets/sod.png') ,route: 'Chat'},
     { name: 'Tree Trimming', code: '#9b59b6',image: require('../assets/trimming.png'), route: 'Chat'},
@@ -39,7 +38,7 @@ return (
       )}
     />
   );
-}
+};
 
 
 const styles = StyleSheet.create({
@@ -68,4 +67,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
